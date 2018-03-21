@@ -13,7 +13,7 @@ into the mailboxes of all users in your domain.
 
 ### A. Creating and authorizing a service account for Gmail API
 
-1. Go to the Developers Console (https://console.developers.google.com/project)
+1. Go to the [Developers Console](https://console.developers.google.com/project)
    and log in as a domain super administrator.
 
 2. Create a new project.
@@ -74,8 +74,9 @@ You can now use the JSON file to authorize programs to access the Gmail API
 
 ### B. Importing mbox files using import-mailbox-to-gmail.py
 
-1. Download the script - [import-mailbox-to-gmail.py]
-(https://github.com/google/import-mailbox-to-gmail/releases/download/v1.3/import-mailbox-to-gmail.py)
+**Important**: If you're planning to import mail from Apple Mail.app, see the notes below.
+
+1. Download the script - [import-mailbox-to-gmail.py](https://github.com/google/import-mailbox-to-gmail/releases/download/v1.5/import-mailbox-to-gmail.py).
 
 2. [Download](https://www.python.org/downloads/) and install Python 2.7 (not
    Python 3.x) for your operating system if needed.
@@ -125,9 +126,10 @@ You can now use the JSON file to authorize programs to access the Gmail API
   the messages are imported correctly.
 
 8. To start the migration, run the following command (one line):
+
    Mac/Linux:
    ```
-   ./import-mailbox-to-gmail.py --json Credentials.json --dir C:\mbox
+   python import-mailbox-to-gmail.py --json Credentials.json --dir C:\mbox
    ```
 
    Windows:
@@ -135,6 +137,9 @@ You can now use the JSON file to authorize programs to access the Gmail API
    C:\Python27\python import-mailbox-to-gmail.py --json Credentials.json --dir C:\mbox
    ```
 
+  * Replace `import-mailbox-to-gmail.py` with the full path of import-mailbox-to-gmail.py -
+    usually `~/Downloads/import-mailbox-to-gmail.py` on Mac/Linux or
+    `%USERPROFILE%\Downloads\import-mailbox-to-gmail.py` on Windows.
   * Replace `Credentials.json` with the path to the JSON file from step 12
     above.
   * Replace `C:\mbox` with the path to the folder you created in step 5.
@@ -143,10 +148,13 @@ The mbox files will now be imported, one by one, into the users' mailboxes. You
 can monitor the migration by looking at the output, and inspect errors by
 viewing the `import-mailbox-to-gmail.log` file.
 
-### C. Options
+### Options and notes
 
 * Use the `--from_message` parameter to start the upload from a particular message.
   This allows you to resume an upload if the process previously stopped. (Affects
   _all_ users and _all_ mbox files)
 
   e.g. `./import-mailbox-to-gmail.py --from_message 74336`
+* If any of the folders have a ".mbox" extension, it will be dropped when creating the label for it in Gmail.
+* To import mail from Apple Mail.app, make sure you export it first - the raw Apple Mail files can't be imported. You can export a folder by right clicking it in Apple Mail and choosing "Export Mailbox".
+* If any of the folders have a ".mbox" extension and a file named "mbox" in them, the contents of the "mbox" file will be imported to the label named as the folder. This is how Apple Mail exports are structured.
